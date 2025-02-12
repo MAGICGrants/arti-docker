@@ -1,3 +1,4 @@
+
 FROM rust:1.84-alpine AS builder
 
 WORKDIR /app
@@ -18,5 +19,9 @@ WORKDIR /home/arti
 USER arti
 
 COPY arti.toml .config/arti/arti.toml
+
+LABEL maintainer="artur@magicgrants.org" \
+      version="1.4.0" \
+      org.opencontainers.image.source="https://github.com/MAGICGrants/arti-docker"
 
 CMD ["arti", "proxy"]
