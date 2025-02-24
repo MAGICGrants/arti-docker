@@ -13,7 +13,7 @@ FROM alpine:latest AS runner
 
 COPY --from=builder /app/target/release/arti /usr/local/bin/
 
-RUN apk add --no-cache shadow
+RUN apk add --no-cache shadow curl
 RUN useradd -m arti
 WORKDIR /home/arti
 USER arti
