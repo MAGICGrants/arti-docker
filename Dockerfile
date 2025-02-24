@@ -11,17 +11,21 @@ RUN cargo build --release
 
 FROM alpine:latest AS runner
 
-COPY --from=builder /app/target/release/arti /usr/local/bin/
-
-RUN apk add --no-cache shadow curl
-RUN useradd -m arti
-WORKDIR /home/arti
-USER arti
-
-COPY arti.toml .config/arti/arti.toml
-
 LABEL maintainer="artur@magicgrants.org" \
       version="1.4.0" \
       org.opencontainers.image.source="https://github.com/MAGICGrants/arti-docker"
 
+COPY --from=builder /app/target/release/arti /usr/local/bin/
+
+RUN apk add --no-cache shadow curl
+RUN useradd -m arti
+
+WORKDIR /home/arti
+
+COPY entrypoint.sh .
+RUN chmod +x entrypoint.sh
+
+USER arti
+
+ENTRYPOINT ["./entrypoint.sh"]
 CMD ["arti", "proxy"]
