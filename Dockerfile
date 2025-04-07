@@ -1,18 +1,22 @@
+ARG VERSION=1.4.1
 
 FROM rust:1.84-alpine AS builder
 
+ARG VERSION
+
 WORKDIR /app
 
-COPY ./arti/Cargo.toml ./arti/Cargo.lock ./
-COPY ./arti/ .
-
-RUN apk add --no-cache musl-dev openssl-dev openssl-libs-static sqlite-dev sqlite-static
+RUN apk add --no-cache git musl-dev openssl-dev openssl-libs-static sqlite-dev sqlite-static
+RUN git clone https://gitlab.torproject.org/tpo/core/arti.git .
+RUN git checkout arti-v${VERSION}
 RUN cargo build --release
 
 FROM alpine:latest AS runner
 
+ARG VERSION
+
 LABEL maintainer="artur@magicgrants.org" \
-      version="1.4.0" \
+      version=${VERSION} \
       org.opencontainers.image.source="https://github.com/MAGICGrants/arti-docker"
 
 COPY --from=builder /app/target/release/arti /usr/local/bin/
