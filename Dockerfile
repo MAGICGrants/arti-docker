@@ -9,7 +9,7 @@ WORKDIR /app
 RUN apk add --no-cache git musl-dev openssl-dev openssl-libs-static sqlite-dev sqlite-static
 RUN git clone https://gitlab.torproject.org/tpo/core/arti.git .
 RUN git checkout arti-v${VERSION}
-RUN cargo build --release
+RUN cargo build --release --features=onion-service-service
 
 FROM alpine:latest AS runner
 
