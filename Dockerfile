@@ -1,4 +1,4 @@
-ARG VERSION=2.3.0
+ARG VERSION=2.5.0
 
 FROM rust:1.94-alpine AS builder
 
